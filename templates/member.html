@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><title>Attendance</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#111;color:white;padding:15px}
+.card{background:#222;padding:15px;border-radius:15px;margin:10px 0}
+a{color:#00ff88;text-decoration:none;font-weight:bold}
+.p{background:#00ff88;color:black;padding:8px 12px;border-radius:8px}
+.a{background:red;color:white;padding:8px 12px;border-radius:8px}
+.day-row{display:flex;justify-content:space-between;background:#333;padding:10px;border-radius:10px;margin:5px 0}
+</style>
+</head>
+<body>
+<a href="/">⬅ BACK</a>
+<h1>🏋️ {{m.name}} - {{m.phone}}</h1>
+<h2>{{month_name}} {{year}} - ATTENDANCE</h2>
+<div class="card">
+<h3>✅ Present: {{present}} din</h3>
+<h3>❌ Absent: {{absent}} din</h3>
+<h3>📅 Total Days: {{daily|length}}</h3>
+</div>
+
+<h3>📅 DATE WISE - Daily</h3>
+{% for d in daily %}
+<div class="day-row">
+<span>{{d.date}} - Day {{d.day}}</span>
+<span>
+{% if d.status == "P" %} ✅ PRESENT
+{% elif d.status == "A" %} ❌ ABSENT
+{% else %} - Not Marked
+{% endif %}
+</span>
+<span>
+<a href="/mark/{{id}}/{{d.date}}/P" class="p">P</a>
+<a href="/mark/{{id}}/{{d.date}}/A" class="a">A</a>
+</span>
+</div>
+{% endfor %}
+</body>
+</html>

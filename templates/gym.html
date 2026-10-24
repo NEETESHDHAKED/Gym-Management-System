@@ -1,1 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head><title>GYM 13 PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial;background:#0f0f0f;color:white;padding:0;margin:0}
+.top{position:sticky;top:0;background:#0f0f0f;padding:15px;z-index:999;display:flex;flex-direction:column;align-items:center}
+.search-wrap{display:flex;align-items:center;background:#1f1f1f;border:2px solid #333;border-radius:50px;padding:5px 5px 5px 18px;box-shadow:0 4px 20px rgba(0,255,136,0.15);width:85%;max-width:420px}
+.search-wrap:focus-within{border-color:#00ff88}
+.search-wrap input{flex:1;background:transparent;border:none;outline:none;color:white;font-size:16px;padding:12px 10px}
+.search-wrap input::placeholder{color:#888}
+.search-btn{background:#00ff88;color:black;border:none;padding:12px 20px;border-radius:50px;font-weight:bold;font-size:15px}
+.clear-btn{background:#333;color:white;padding:8px 10px;border-radius:50px;text-decoration:none;font-size:13px;margin-left:5px}
+.search-res{width:85%;max-width:420px;background:#16281e;border:1px solid #00ff88;padding:12px;border-radius:15px;margin-top:12px}
+.card{background:#1f1f1f;padding:15px;border-radius:15px;margin:12px 15px}
+input,select{width:100%;padding:12px;margin:5px 0;border-radius:10px;border:none;background:#2a2a2a;color:white}
+button{background:#00ff88;color:black;padding:12px;width:100%;border:none;border-radius:10px;font-weight:bold}
+a{color:#00ff88;text-decoration:none;font-weight:bold}
+.paid{color:#00ff88}.pend{color:red}
+</style>
+</head>
+<body>
 
+<div class="top">
+<form method="GET" action="/" class="search-wrap">
+<span>🔍</span>
+<input name="q" value="{{q}}" placeholder="Search... Naam / Phone">
+{% if q %}<a href="/" class="clear-btn">✕</a>{% endif %}
+<button class="search-btn">Search</button>
+</form>
+
+{% if q %}
+<div class="search-res">
+<b>🔍 "{{q}}" - {{search_result|length}} mila</b><br><br>
+{% for m in search_result %}
+<div style="background:#222;padding:10px;border-radius:10px;margin:5px 0">
+<b>{{m.name}}</b> - {{m.phone}} | {{m.plan}} | ₹{{m.fees}} | {{m.status}}<br>
+<a href="/member/{{m.id}}">🏋️ ATTENDANCE DEKHO</a> | <a href="/paid/{{m.id}}">💰 PAID</a>
+</div>
+{% else %}
+<p>❌ Koi nahi mila</p>
+{% endfor %}
+</div>
+{% endif %}
+</div>
+
+<div style="padding:0 15px">
+<h1>🏋️ CHOMU FITNESS 13</h1>
+<h3>Total: {{count}} | Collection: ₹{{total}} | Pending: {{pending}}</h3>
+</div>
+
+<div class="card">
+<form action="/add" method="POST">
+<input name="name" placeholder="Member Ka Naam" required>
+<input name="phone" placeholder="Phone" required>
+<select name="plan"><option>1 Month</option><option>3 Month</option><option>6 Month</option><option>1 Year</option></select>
+<select name="fees"><option value="500">₹500</option><option value="1200">₹1200</option><option value="2000">₹2000</option><option value="3500">₹3500</option></select>
+<button>➕ MEMBER ADD KARO</button>
+</form>
+</div>
+
+{% for m in members %}
+<div class="card">
+<b>{{m.name}}</b> - {{m.phone}}<br>
+{{m.plan}} | ₹{{m.fees}} | <span class="{{'paid' if m.status=='PAID' else 'pend'}}">{{m.status}}</span><br><br>
+<a href="/member/{{m.id}}">🏋️ ATTENDANCE LAGAO</a> | 
+<a href="/paid/{{m.id}}">💰 PAID</a> | 
+<a href="/delete/{{m.id}}" style="color:red">DELETE</a>
+</div>
+{% endfor %}
+</body>
+</html>
